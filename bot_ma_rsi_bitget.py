@@ -92,6 +92,7 @@ def send_telegram(text):
         requests.post(url, data=payload, timeout=10)
     except Exception as e:
         print('Erreur Telegram:', e)
+   time.sleep(60) 
 
 
 def get_ohlcv(symbol, timeframe, limit=200):
@@ -102,8 +103,11 @@ def get_ohlcv(symbol, timeframe, limit=200):
         df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms')
         return df
     except Exception as e:
-        print('Erreur fetch_ohlcv:', e)
-        return None
+         print('Erreur fetch_ohlcv:', e)
+         return None
+         
+   time.sleep(60)
+
 
 
 def compute_indicators(df):
@@ -168,6 +172,7 @@ def place_order_live(side, price, size_usdt):
         print('Erreur place_order_live:', e, tb)
         send_telegram('Erreur order live: ' + str(e))
         return None
+   time.sleep(60)
 
 
 # Main loop
@@ -238,6 +243,7 @@ def main_loop():
             print('Erreur main loop:', e, tb)
             send_telegram('Erreur bot: ' + str(e))
             time.sleep(POLL_INTERVAL)
+      time.sleep(60)
 
 
 if __name__ == '__main__':
