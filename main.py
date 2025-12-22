@@ -41,6 +41,26 @@ from dotenv import load_dotenv
 import csv
 import traceback
 from koyeb import Sandbox
+from flask import Flask
+import threading
+
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Bot running"
+
+def run_bot():
+    while True:
+        print("Bot en cours d'exécution...")
+        time.sleep(60)
+
+if __name__ == "__main__":
+    t = threading.Thread(target=run_bot)
+    t.start()
+    app.run(host=" 127.0.0.1", port=8080)#coneection port 
+
 
 sandbox = Sandbox.create(
   image="ubuntu",
