@@ -59,12 +59,6 @@ RSI_PERIOD = int(os.getenv('RSI_PERIOD', '14'))
 RSI_BUY = float(os.getenv('RSI_BUY', '30'))
 RSI_SELL = float(os.getenv('RSI_SELL', '70'))
 TRADE_SIZE_USDT = float(os.getenv('TRADE_SIZE_USDT', '5'))  # montant par trade en USDT (demo)
-<<<<<<< HEAD
-try:
-   POLL_INTERVAL = int(os.getenv('POLL_INTERVAL', '60'))  # en secondes
-except ValueError:
-    POLL_INTERVAL = 60  
-=======
              # ou LIVE en français'
 nombre_str ="60" 
 
@@ -74,7 +68,6 @@ try:
 except ValueError:
     POLL_INTERVAL = 60  # défaut 60 secondes
 
->>>>>>> 857260d (Update bot_ma_rsi_bitget.py and add Procfile)
 # Setup exchange (ccxt)
 
 
@@ -116,7 +109,6 @@ def send_telegram(text):
         requests.post(url, data=payload, timeout=10)
     except Exception as e:
         print('Erreur Telegram:', e)
-   time.sleep(60) 
 
 """
 def get_ohlcv(symbol, timeframe, limit=100):
@@ -127,13 +119,6 @@ def get_ohlcv(symbol, timeframe, limit=100):
         df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms')
         return df
     except Exception as e:
-<<<<<<< HEAD
-         print('Erreur fetch_ohlcv:', e)
-         return None
-         
-   time.sleep(60)
-
-=======
         print('Erreur fetch_ohlcv,Erreur API:', e)
 
     return None
@@ -162,7 +147,6 @@ def get_ohlcv(symbol, timeframe, limit=100):
         
          
         return None
->>>>>>> 857260d (Update bot_ma_rsi_bitget.py and add Procfile)
 
 
 def compute_indicators(df):
@@ -227,7 +211,6 @@ def place_order_live(side, price, size_usdt):
         print('Erreur place_order_live:', e, tb)
         send_telegram('Erreur order live: ' + str(e))
         return None
-   time.sleep(60)
 
 
 # Main loop
@@ -298,7 +281,6 @@ def main_loop():
             print('Erreur main loop:', e, tb)
             send_telegram('Erreur bot: ' + str(e))
             time.sleep(POLL_INTERVAL)
-      time.sleep(60)
 
 
 if __name__ == '__main__':
