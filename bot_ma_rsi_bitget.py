@@ -59,26 +59,49 @@ RSI_PERIOD = int(os.getenv('RSI_PERIOD', '14'))
 RSI_BUY = float(os.getenv('RSI_BUY', '30'))
 RSI_SELL = float(os.getenv('RSI_SELL', '70'))
 TRADE_SIZE_USDT = float(os.getenv('TRADE_SIZE_USDT', '5'))  # montant par trade en USDT (demo)
+<<<<<<< HEAD
 try:
    POLL_INTERVAL = int(os.getenv('POLL_INTERVAL', '60'))  # en secondes
 except ValueError:
     POLL_INTERVAL = 60  
+=======
+             # ou LIVE en français'
+nombre_str ="60" 
+
+
+try:
+    POLL_INTERVAL = int(os.getenv('POLL_INTERVAL', nombre_str))  # en secondes
+except ValueError:
+    POLL_INTERVAL = 60  # défaut 60 secondes
+
+>>>>>>> 857260d (Update bot_ma_rsi_bitget.py and add Procfile)
 # Setup exchange (ccxt)
+
+
 exchange = ccxt.bitget({
-    'apiKey': BITGET_API_KEY,
-    'secret': BITGET_API_SECRET,
-    'uid': None,
+    "apiKey": BITGET_API_KEY,
+    "secret": BITGET_API_SECRET,
+    "enableRateLimit": True,
+    "options": {
+        "adjustForTimeDifference": True
+    }
 })
+
+balance = exchange.load_markets()
 
 
 symbol = "PEPE/USDT"
-timeframe = "1h"  # CCXT va convertir en "1H"
-limit = 200
+timeframe = "5m"
+LIMIT = 10
 
-data = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
+
+_ =exchange.load_markets()
+# 1 heure en secondes
+data = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=LIMIT)
+
 print(data)
 
-# Note: Bitget ccxt may need extra params for passphrase or subaccount. Ajuste si besoin.
+# Note: Bitget ccxt may need extra params for passphrase or subaccount. Ajuste si besoin.²
 
 # Utilities
 
@@ -95,20 +118,51 @@ def send_telegram(text):
         print('Erreur Telegram:', e)
    time.sleep(60) 
 
-
-def get_ohlcv(symbol, timeframe, limit=200):
-    # ccxt uses symbol format like 'PEPE/USDT'
+"""
+def get_ohlcv(symbol, timeframe, limit=100):
+        # ccxt uses symbol format like 'PEPE/USDT'
     try:
         ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
         df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
         df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms')
         return df
     except Exception as e:
+<<<<<<< HEAD
          print('Erreur fetch_ohlcv:', e)
          return None
          
    time.sleep(60)
 
+=======
+        print('Erreur fetch_ohlcv,Erreur API:', e)
+
+    return None
+"""
+def get_ohlcv(symbol, timeframe, limit=100):
+    try:
+        ohlcv = exchange.fetch_ohlcv(
+            symbol,
+            timeframe=timeframe,
+            limit=limit,
+            params={
+                "productType": "USDT-FUTURES"
+            }
+        )
+
+        df = pd.DataFrame(
+            ohlcv,
+            columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
+        )
+
+        df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms')
+        return df
+
+    except Exception as e:
+        print("❌ Erreur fetch_ohlcv Bitget:", e)
+        
+         
+        return None
+>>>>>>> 857260d (Update bot_ma_rsi_bitget.py and add Procfile)
 
 
 def compute_indicators(df):
@@ -183,7 +237,7 @@ def main_loop():
     send_telegram(f'Bot démarré en mode {MODE} — stratégie: MA({MA_PERIOD}) + RSI({RSI_PERIOD}) — symbole: {SYMBOL} — timeframe: {TIMEFRAME}')
     while True:
         try:
-            df = get_ohlcv(SYMBOL, TIMEFRAME, limit=200)
+            df = get_ohlcv(SYMBOL, TIMEFRAME, limit=100)
             if df is None or df.empty:
                 time.sleep(POLL_INTERVAL)
                 continue
