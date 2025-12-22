@@ -40,7 +40,18 @@ from datetime import datetime
 from dotenv import load_dotenv
 import csv
 import traceback
+from koyeb import Sandbox
 
+sandbox = Sandbox.create(
+  image="ubuntu",
+  name="hello-world",
+  wait_ready=True,
+)
+
+result = sandbox.exec("echo 'Hello World'")
+print(result.stdout.strip())
+
+sandbox.delete()
 
 load_dotenv()
 
