@@ -59,9 +59,10 @@ RSI_PERIOD = int(os.getenv('RSI_PERIOD', '14'))
 RSI_BUY = float(os.getenv('RSI_BUY', '30'))
 RSI_SELL = float(os.getenv('RSI_SELL', '70'))
 TRADE_SIZE_USDT = float(os.getenv('TRADE_SIZE_USDT', '5'))  # montant par trade en USDT (demo)
-
-POLL_INTERVAL = int(os.getenv('POLL_INTERVAL', '60'))  # en secondes
-
+try:
+   POLL_INTERVAL = int(os.getenv('POLL_INTERVAL', '60'))  # en secondes
+except ValueError:
+    POLL_INTERVAL = 60  
 # Setup exchange (ccxt)
 exchange = ccxt.bitget({
     'apiKey': BITGET_API_KEY,
