@@ -1,0 +1,12 @@
+ccxt
+flask
+python-telegram-bot
+pandas
+numpy
+traceback
+koyeb
+datetime
+dotenv
+csv
+threading
+time
