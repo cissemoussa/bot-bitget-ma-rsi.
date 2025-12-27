@@ -44,6 +44,31 @@ from koyeb import Sandbox
 from flask import Flask
 import threading
 
+#render
+app = Flask(__name__)
+
+# --- Ton bot ---
+def run_bot():
+    while True:
+        # Place ici ton code de bot Bitget MA/RSI
+        print("Bot is running...")
+        time.sleep(60)  # attendre 1 minute avant le prochain cycle
+
+# --- Flask ---
+@app.route("/")
+def home():
+    return "Bot is running!"
+
+if __name__ == "__main__":
+    # Lancer le bot dans un thread
+    t = threading.Thread(target=run_bot)
+    t.start()
+
+    # Démarrer Flask sur le port fourni par Render
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
+
+
 
 app = Flask(__name__)
 
@@ -56,7 +81,7 @@ def run_bot():
         print("Bot en cours d'exécution...")
         time.sleep(60)
 
-
+#  render
    
     
 
